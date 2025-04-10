@@ -26,4 +26,14 @@ public class PostService {
     public boolean deletePostById(int id) {
         return postRepository.delete(id);
     }
+
+    public Boolean updatePostTitle(int id, String newTitle) {
+        Post post = postRepository.findPostById(id);
+        if (post == null) {
+            return false; // 해당 ID의 게시물이 없을 경우
+        }
+
+        post.setTitle(newTitle);
+        return true;
+    }
 }
