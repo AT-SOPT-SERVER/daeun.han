@@ -4,35 +4,31 @@ import org.sopt.domain.Post;
 import org.sopt.service.PostService;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PostController {
+    private final PostService postService = new PostService();
 
-    private PostService postService = new PostService();
-
-    private int postId;
-
-//    public Object selectMethod(int inputCase) {
-//        switch (inputCase) {
-//            case 1:
-//                createPost();
-//        }
-//    }
-
-    public void createPost(String title) {
-        Post post = new Post(postId, title);
-        postService.createPost(post);
+    public void createPost(final String title) {
+        postService.createPost(title);
     }
 
     public List<Post> getAllPosts() {
-        return postService.getAllPost();
+        return postService.getAllPosts();
     }
 
     public Post getPostById(int id) {
         return postService.getPostById(id);
     }
-
-    public boolean deletePostById(int deleteId) {
-        return postService.deletePostById(deleteId);
+    public Boolean updatePostTitle(int id, String newTitle) {
+        return null;
     }
+
+    public boolean deletePostById(int id) {
+        return postService.deletePostById(id);
+    }
+
+    public List<Post> searchPostsByKeyword(String keyword) {
+        return null;
+    }
+
 }
