@@ -10,9 +10,11 @@ public class PostService {
     private int postId = 1;
 
     public void createPost(String title) {
-        Post post = new Post(postId++, title);
+        // 예외가 발생하지 않을 때만 postId++ 하도록 수정
+        Post post = new Post(postId, title);
 
         postRepository.save(post);
+        postId++; // 성공적으로 저장된 후에 증가
     }
 
     public List<Post> getAllPosts() {

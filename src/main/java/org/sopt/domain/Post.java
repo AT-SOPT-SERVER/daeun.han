@@ -6,6 +6,11 @@ public class Post {
     private int id;
     private String title;
     public Post(int id, String title){
+
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("제목은 필수입니다.");
+        }
+
         this.id = id;
         this.title = title;
     }
