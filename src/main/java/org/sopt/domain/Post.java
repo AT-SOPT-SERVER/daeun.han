@@ -8,7 +8,10 @@ public class Post {
     public Post(int id, String title){
 
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("제목은 필수입니다.");
+            throw new IllegalArgumentException("제목은 필수입니다. 제목이 비어 있는 경우에는 게시글 작성이 되지 않습니다.");
+        }
+        if (title.length() > 30) {
+            throw new IllegalArgumentException("제목은 30자를 넘지 않게 해주세요.제목이 너무 긴 경우에는 게시글 작성이 되지 않습니다.");
         }
 
         this.id = id;

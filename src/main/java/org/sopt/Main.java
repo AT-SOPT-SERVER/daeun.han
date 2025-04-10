@@ -28,7 +28,7 @@ public class Main {
                         controller.createPost(title);  // 여기서 예외가 발생할 수 있음
                         System.out.println("✅ 게시글이 성공적으로 저장되었습니다!");
                     } catch (IllegalArgumentException e) {
-                        System.out.println("❌ " + e.getMessage() + " 제목이 비어 있는 경우에는 게시글 작성이 되지 않습니다." );
+                        System.out.println("❌ " + e.getMessage());
                     }
                     break;
 
