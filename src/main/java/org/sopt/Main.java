@@ -1,9 +1,5 @@
 package org.sopt;
 
-import java.util.List;
-import java.util.Scanner;
-import org.sopt.controller.PostController;
-import org.sopt.domain.Post;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
