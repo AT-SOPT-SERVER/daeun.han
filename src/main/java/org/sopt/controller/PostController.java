@@ -22,7 +22,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody PostRequest request) {
         try {
-            Post post = postService.createPost(request.getTitle());
+            Post post = postService.createPost(request.title());
             return ResponseEntity.ok(post);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -48,7 +48,7 @@ public class PostController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updatePostTitle(@PathVariable Long id, @RequestBody PostRequest request) {
         try {
-            boolean updated = postService.updatePostTitle(id, request.getTitle());
+            boolean updated = postService.updatePostTitle(id, request.title());
             if (updated) {
                 return ResponseEntity.ok().build();
             } else {
