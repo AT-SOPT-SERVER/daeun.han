@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Post findPostById(int id);
 
-    boolean delete(int id);
+    boolean deleteById(int id);
 }
