@@ -32,16 +32,20 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    // 게시물 제목 수정
+    // 게시글 제목 수정
     public boolean updatePostTitle(Long id, String newTitle) {
-        Optional<Post> optionalPost = postRepository.findById(id);
-        if (optionalPost.isPresent()) {
-            Post post = optionalPost.get();
-            post.updateTitle(newTitle);
-            postRepository.save(post);
-            return true;
+        Post post = postRepository.findById(id).orElse(null);
+        if (post == null) {
+            return false; // 해당 ID의 게시물이 없을 경우
         }
-        return false;
+
+        try {
+            post.updateTitle(newTitle); // 도메인 객체의 메서드로 제목 수정
+            postRepository.save(post);  // DB에 저장
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false; // 유효성 검증에서 실패한 경우
+        }
     }
 
     // 게시물 삭제
