@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Post findPostById(int id);
 
-    boolean deleteById(int id);
+    // 기본 CRUD 기능은 JpaRepository가 모두 제공
+//    Post findPostById(int id);
+//
+//    boolean deleteById(int id);
+
 }

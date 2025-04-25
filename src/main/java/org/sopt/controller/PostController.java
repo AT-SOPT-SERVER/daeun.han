@@ -4,14 +4,12 @@ import org.sopt.domain.Post;
 import org.sopt.dto.PostRequest;
 import org.sopt.service.PostService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
@@ -19,30 +17,49 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/post") // @PostMapping 어노테이션을 붙임으로서 HTTP 요청을 객체로 변환 (요청을 자동으로 분석해서 어떤 메서드를 호출할지 결정)
-    public void createPost(@RequestBody final PostRequest postRequest) {
-        // @RequestBody 를 붙이면 JSON 형식으로 온 요청 데이터를 PostRequest에 자동으로 매핑(request 의 body 내에 있는 값 역시 객체로 변환)
-        postService.createPost(postRequest.getTitle());
+    @PostMapping
+    public ResponseEntity<?> createPost(@RequestBody PostRequest request) {
+        try {
+            Post post = postService.createPost(request);
+            return ResponseEntity.ok(post);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<?> getAllPosts() {
+    @GetMapping
+    public ResponseEntity<List<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    public Post getPostById(int id) {
-        return postService.getPostById(id);
-    }
-    public Boolean updatePostTitle(int id, String newTitle) {
-        return postService.updatePostTitle(id, newTitle);
-    }
-
-    public boolean deletePostById(int id) {
-        return postService.deletePostById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable Long id) {
+        return postService.getPostById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return null;
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updatePostTitle(@PathVariable Long id, @RequestBody PostRequest request) {
+        try {
+            boolean updated = postService.updatePostTitle(id, request.getTitle());
+            if (updated) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        boolean deleted = postService.deletePostById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

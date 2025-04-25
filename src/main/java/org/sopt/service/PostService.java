@@ -1,49 +1,50 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.dto.PostRequest;
 import org.sopt.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private int postId = 1;
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
-    public void createPost(String title) {
-        // 예외가 발생하지 않을 때만 postId++ 하도록 수정
-        Post post = new Post(title);
-
-        postRepository.save(post);
-        postId++; // 성공적으로 저장된 후에 증가
-
-        System.out.println(post.getTitle());
+    public Post createPost(PostRequest request) {
+        Post post = new Post(request.getTitle());
+        return postRepository.save(post);
     }
 
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
-    public Post getPostById(int id) {
-        return postRepository.findPostById(id);
+    public Optional<Post> getPostById(Long id) {
+        return postRepository.findById(id);
     }
-
-    public boolean deletePostById(int id) {
-        return postRepository.deleteById(id);
-    }
-
-    public Boolean updatePostTitle(int id, String newTitle) {
-        Post post = postRepository.findPostById(id);
-        if (post == null) {
-            return false; // 해당 ID의 게시물이 없을 경우
+    public boolean updatePostTitle(Long id, String newTitle) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.updateTitle(newTitle); // 내부 검증 포함
+            postRepository.save(post);
+            return true;
         }
-
-        post.setTitle(newTitle);
-        return true;
+        return false;
     }
+
+    public boolean deletePostById(Long id) {
+        if (postRepository.existsById(id)) {
+            postRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }
