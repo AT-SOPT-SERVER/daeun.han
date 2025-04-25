@@ -17,7 +17,7 @@ public class PostService {
 
     public void createPost(String title) {
         // 예외가 발생하지 않을 때만 postId++ 하도록 수정
-        Post post = new Post(postId, title);
+        Post post = new Post(title);
 
         postRepository.save(post);
         postId++; // 성공적으로 저장된 후에 증가

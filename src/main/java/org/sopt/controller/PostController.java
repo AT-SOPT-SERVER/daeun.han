@@ -19,8 +19,9 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/post")
+    @PostMapping("/post") // @PostMapping 어노테이션을 붙임으로서 HTTP 요청을 객체로 변환 (요청을 자동으로 분석해서 어떤 메서드를 호출할지 결정)
     public void createPost(@RequestBody final PostRequest postRequest) {
+        // @RequestBody 를 붙이면 JSON 형식으로 온 요청 데이터를 PostRequest에 자동으로 매핑(request 의 body 내에 있는 값 역시 객체로 변환)
         postService.createPost(postRequest.getTitle());
     }
 

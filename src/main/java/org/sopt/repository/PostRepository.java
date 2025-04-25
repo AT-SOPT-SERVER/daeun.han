@@ -1,40 +1,12 @@
 package org.sopt.repository;
 
 import org.sopt.domain.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
-public class PostRepository {
-    List<Post> postList = new ArrayList<>();
+public interface PostRepository extends JpaRepository<Post, Long> {
+    Post findPostById(int id);
 
-    public void save(Post post) {
-        postList.add(post);
-    }
-
-    public List<Post> findAll() {
-        return postList;
-    }
-
-    public Post findPostById(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                return post;
-            }
-        }
-
-        return null;
-    }
-
-    public boolean delete(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                postList.remove(post);
-                return true;
-            }
-        }
-        return false;
-    }
+    boolean delete(int id);
 }
