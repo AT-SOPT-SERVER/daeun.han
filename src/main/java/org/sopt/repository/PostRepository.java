@@ -1,38 +1,15 @@
 package org.sopt.repository;
 
 import org.sopt.domain.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+@Repository
+public interface PostRepository extends JpaRepository<Post, Long> {
 
-public class PostRepository {
-    List<Post> postList = new ArrayList<>();
+    // 기본 CRUD 기능은 JpaRepository가 모두 제공
+//    Post findPostById(int id);
+//
+//    boolean deleteById(int id);
 
-    public void save(Post post) {
-        postList.add(post);
-    }
-
-    public List<Post> findAll() {
-        return postList;
-    }
-
-    public Post findPostById(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                return post;
-            }
-        }
-
-        return null;
-    }
-
-    public boolean delete(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                postList.remove(post);
-                return true;
-            }
-        }
-        return false;
-    }
 }
