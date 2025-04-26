@@ -24,8 +24,10 @@ public class PostController {
         try {
             Post post = postService.createPost(request.title());
             return ResponseEntity.ok(post);
+//            return ResponseEntity.status(HttpStatus.OK).body(post);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
