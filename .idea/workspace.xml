@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af339066-8f07-4148-8c92-6618e6c30de3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/domain/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/dto/UserCreateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/domain/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/domain/Post.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +85,15 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.sopt.dto" />
+      <recent name="org.sopt.service" />
+      <recent name="org.sopt.controller" />
+      <recent name="org.sopt.repository" />
+      <recent name="org.sopt.domain" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="assignment.main" />
@@ -116,7 +129,9 @@
       <workItem from="1745564711326" duration="1392000" />
       <workItem from="1745643945347" duration="711000" />
       <workItem from="1745646130822" duration="1634000" />
-      <workItem from="1745653846193" duration="640000" />
+      <workItem from="1745653846193" duration="3091000" />
+      <workItem from="1746014345912" duration="1728000" />
+      <workItem from="1746078110006" duration="2358000" />
     </task>
     <servers />
   </component>

@@ -11,12 +11,18 @@ public class Post {
 
     @Column(nullable = false, length = 30)
     private String title;
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Post() {}
 
     public Post(String title) {
         validateTitle(title); // 제목 검증
         this.title = title;
+        this.content = content;
     }
 
     public Long getId() {
