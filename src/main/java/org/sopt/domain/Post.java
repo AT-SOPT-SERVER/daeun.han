@@ -38,7 +38,7 @@ public class Post {
     // 제목 검증 메서드 (private)
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty() || title.length() > 30) {
-            throw new CustomException(ErrorCode.INVALID_TITLE);
+            throw new CustomException(ErrorCode.TITLE_NULL);
         }
     }
 

@@ -8,23 +8,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 우리가 정의한 CustomException 처리
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+        ErrorCode errorCode = e.getErrorCode();
         ErrorResponse errorResponse = new ErrorResponse(
-                e.getErrorCode().getStatusCode(),
-                e.getMessage()
+                errorCode.getStatusCode(),
+                errorCode.getMessage()
         );
-        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
                 .body(errorResponse);
     }
 
-    // fallback
+    // 기타 예상하지 못한 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(
-                500,
-                "예상치 못한 오류가 발생했습니다."
+                ErrorCode.INTERNAL_SERVER_ERROR.getStatusCode(),
+                ErrorCode.INTERNAL_SERVER_ERROR.getMessage()
         );
-        return ResponseEntity.internalServerError().body(errorResponse);
+        return ResponseEntity
+                .status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+                .body(errorResponse);
     }
 }
