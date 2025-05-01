@@ -1,59 +1,89 @@
+// PostService.java
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.domain.User;
+import org.sopt.dto.*;
+import org.sopt.global.exception.CustomException;
+import org.sopt.global.exception.ErrorCode;
 import org.sopt.repository.PostRepository;
+import org.sopt.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
-    // 게시물 생성
-    public Post createPost(String title) {
-        Post post = new Post(title);
-        return postRepository.save(post);
+    public Long createPost(Long userId, PostRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        validatePost(request.getTitle(), request.getContent());
+
+        Post post = new Post(request.getTitle(), request.getContent(), user);
+        return postRepository.save(post).getId();
     }
 
-    // 모든 게시물 조회
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    // 게시글 전체 조회 (최신 순)
+    public List<PostSummaryResponse> getAllPosts() {
+        List<Post> posts = postRepository.findAllByOrderByIdDesc();  // 최신 순으로 게시글 조회
+        return posts.stream()
+                .map(post -> new PostSummaryResponse(post.getTitle(), post.getUser().getName()))  // 제목과 작성자 이름을 DTO로 변환
+                .collect(Collectors.toList());
     }
 
-    // 게시물 ID로 조회
-    public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id);
+    public PostDetailResponse getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        return new PostDetailResponse(post.getId(), post.getTitle(), post.getContent(), post.getAuthorName());
     }
 
-    // 게시글 제목 수정
-    public boolean updatePostTitle(Long id, String newTitle) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null) {
-            return false; // 해당 ID의 게시물이 없을 경우
+    @Transactional
+    public void updatePost(Long postId, PostRequest request, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_POST_ACCESS);
         }
 
-        try {
-            post.updateTitle(newTitle); // 도메인 객체의 메서드로 제목 수정
-            postRepository.save(post);  // DB에 저장
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false; // 유효성 검증에서 실패한 경우
-        }
+        validatePost(request.getTitle(), request.getContent());
+
+        post.update(request.getTitle(), request.getContent());
     }
 
-    // 게시물 삭제
-    public boolean deletePostById(Long id) {
-        if (postRepository.existsById(id)) {
-            postRepository.deleteById(id);
-            return true;
+    public void deletePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_POST_ACCESS);
         }
-        return false;
+
+        postRepository.delete(post);
+    }
+
+    // 제목+내용 한 번에 검증
+    private void validatePost(String title, String content) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.TITLE_NULL);
+        }
+        if (title.length() > 30) {
+            throw new CustomException(ErrorCode.TITLE_TOO_LONG);
+        }
+        if (content == null || content.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.CONTENT_NULL);
+        }
     }
 }
