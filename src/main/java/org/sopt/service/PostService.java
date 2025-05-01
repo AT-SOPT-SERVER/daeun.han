@@ -9,6 +9,7 @@ import org.sopt.global.ErrorCode;
 import org.sopt.repository.PostRepository;
 import org.sopt.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,9 +28,9 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        validatePost(request.title(), request.content());
+        validatePost(request.getTitle(), request.getContent());
 
-        Post post = new Post(request.title(), request.content(), user);
+        Post post = new Post(request.getTitle(), request.getContent(), user);
         return postRepository.save(post).getId();
     }
 
@@ -44,9 +45,11 @@ public class PostService {
     public PostDetailResponse getPostById(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
         return new PostDetailResponse(post.getId(), post.getTitle(), post.getContent(), post.getAuthorName());
     }
 
+    @Transactional
     public void updatePost(Long postId, PostRequest request, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
@@ -55,9 +58,9 @@ public class PostService {
             throw new CustomException(ErrorCode.UNAUTHORIZED_POST_ACCESS);
         }
 
-        validatePost(request.title(), request.content());
+        validatePost(request.getTitle(), request.getContent());
 
-        post.update(request.title(), request.content());
+        post.update(request.getTitle(), request.getContent());
     }
 
     public void deletePost(Long postId, Long userId) {

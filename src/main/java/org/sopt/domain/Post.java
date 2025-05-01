@@ -1,8 +1,6 @@
 package org.sopt.domain;
 
 import jakarta.persistence.*;
-import org.sopt.global.CustomException;
-import org.sopt.global.ErrorCode;
 
 @Entity
 public class Post {
@@ -11,7 +9,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 30)
     private String title;
 
     @Column(nullable = false)

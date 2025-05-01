@@ -5,11 +5,11 @@ public class PostRequest {
     private String title;
     private String content;
 
-    public String title() {
+    public String getTitle() {
         return title;
     }
 
-    public String content() {
+    public String getContent() {
         return content;
     }
 }
