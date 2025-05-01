@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+// @RestControllerAdvice는 전역적으로 예외를 처리-> 모든 @RestController에서 발생하는 예외를 한 곳에서 처리 가능
+// @ExceptionHandler 메서드와 함께 사용되어 일관된 에러 응답을 제공
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
