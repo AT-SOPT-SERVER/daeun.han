@@ -8,15 +8,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException e) {
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
+                e.getErrorCode().getStatusCode(),
                 e.getMessage()
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
                 .body(errorResponse);
     }
 
-    // 다른 예외 상황도 필요에 따라 확장 가능
+    // fallback
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                500,
+                "예상치 못한 오류가 발생했습니다."
+        );
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
 }

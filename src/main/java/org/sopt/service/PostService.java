@@ -1,6 +1,8 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.global.CustomException;
+import org.sopt.global.ErrorCode;
 import org.sopt.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,8 @@ public class PostService {
 
     // 게시물 ID로 조회
     public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id);
+        return postRepository.findById(id)
+                .or(() -> { throw new CustomException(ErrorCode.POST_NOT_FOUND); });
     }
 
     // 게시글 제목 수정
