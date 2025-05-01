@@ -12,15 +12,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
 
     @OneToMany(mappedBy = "user")
     private List<Post> diaryEntities = new ArrayList<>();
 
     protected User() {}
 
-    public User(String name, String email) {
+    public User(String name) {
         this.name = name;
-        this.email = email;
     }
 }
