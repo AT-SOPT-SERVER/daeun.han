@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af339066-8f07-4148-8c92-6618e6c30de3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/domain/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/dto/UserCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/dto/UserCreateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/dto/PostDetailResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/sopt/dto/PostSummaryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/domain/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/domain/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/sopt/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/sopt/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,8 +44,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Record" />
         <option value="Enum" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -84,6 +88,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.sopt.dto" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.sopt.dto" />
       <recent name="org.sopt.service" />

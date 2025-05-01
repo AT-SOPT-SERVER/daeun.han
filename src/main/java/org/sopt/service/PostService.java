@@ -1,62 +1,86 @@
+// PostService.java
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.domain.User;
+import org.sopt.dto.*;
 import org.sopt.global.CustomException;
 import org.sopt.global.ErrorCode;
 import org.sopt.repository.PostRepository;
+import org.sopt.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
-    // 게시물 생성
-    public Post createPost(String title, String content) {
-        Post post = new Post(title, content);
-        return postRepository.save(post);
+    public Long createPost(Long userId, PostRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        validatePost(request.title(), request.content());
+
+        Post post = new Post(request.title(), request.content(), user);
+        return postRepository.save(post).getId();
     }
 
-    // 모든 게시물 조회
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    // 게시글 전체 조회 (최신 순)
+    public List<PostSummaryResponse> getAllPosts() {
+        List<Post> posts = postRepository.findAllByOrderByIdDesc();  // 최신 순으로 게시글 조회
+        return posts.stream()
+                .map(post -> new PostSummaryResponse(post.getTitle(), post.getUser().getName()))  // 제목과 작성자 이름을 DTO로 변환
+                .collect(Collectors.toList());
     }
 
-    // 게시물 ID로 조회
-    public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id)
-                .or(() -> { throw new CustomException(ErrorCode.POST_NOT_FOUND); });
+    public PostDetailResponse getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        return new PostDetailResponse(post.getId(), post.getTitle(), post.getContent(), post.getAuthorName());
     }
 
-    // 게시글 제목과 내용 수정
-    public boolean updatePost(Long id, String newTitle, String newContent) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null) {
-            return false; // 해당 ID의 게시물이 없을 경우
+    public void updatePost(Long postId, PostRequest request, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_POST_ACCESS);
         }
 
-        try {
-            post.updatePost(newTitle, newContent); // 제목과 내용 동시에 수정
-            postRepository.save(post);  // DB에 저장
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false; // 유효성 검증에서 실패한 경우
-        }
+        validatePost(request.title(), request.content());
+
+        post.update(request.title(), request.content());
     }
 
-    // 게시물 삭제
-    public boolean deletePostById(Long id) {
-        if (postRepository.existsById(id)) {
-            postRepository.deleteById(id);
-            return true;
+    public void deletePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_POST_ACCESS);
         }
-        return false;
+
+        postRepository.delete(post);
+    }
+
+    // 제목+내용 한 번에 검증
+    private void validatePost(String title, String content) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.TITLE_NULL);
+        }
+        if (title.length() > 30) {
+            throw new CustomException(ErrorCode.TITLE_TOO_LONG);
+        }
+        if (content == null || content.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.CONTENT_NULL);
+        }
     }
 }

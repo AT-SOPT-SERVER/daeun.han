@@ -1,13 +1,13 @@
+// PostController.java
 package org.sopt.controller;
 
-import org.sopt.dto.PostRequest;
+import org.sopt.dto.*;
 import org.sopt.service.PostService;
-import org.sopt.domain.Post;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
@@ -19,42 +19,46 @@ public class PostController {
         this.postService = postService;
     }
 
-    // 게시물 생성
+    // 게시글 생성
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody PostRequest request) {
-        Post post = postService.createPost(request.title(), request.content());
-        return ResponseEntity.ok(post);
+    public ResponseEntity<Void> createPost(
+            @RequestHeader("userId") Long userId,
+            @RequestBody PostRequest request
+    ) {
+        postService.createPost(userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 모든 게시물 조회
+    // 게시글 전체 조회
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
-        List<Post> posts = postService.getAllPosts();
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<List<PostSummaryResponse>> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    // 게시물 ID로 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Post>> getPostById(@PathVariable Long id) {
-        Optional<Post> post = postService.getPostById(id);
-        return ResponseEntity.ok(post);
+    // 게시글 상세 조회
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostDetailResponse> getPostById(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.getPostById(postId));
     }
 
-    // 게시물 수정
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostRequest request) {
-        boolean updated = postService.updatePost(id, request.title(), request.content());
-        if (updated) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    // 게시글 수정
+    @PutMapping("/{postId}")
+    public ResponseEntity<Void> updatePost(
+            @PathVariable Long postId,
+            @RequestHeader("userId") Long userId,
+            @RequestBody PostRequest request
+    ) {
+        postService.updatePost(postId, request, userId);
+        return ResponseEntity.noContent().build();
     }
 
-    // 게시물 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        postService.deletePostById(id);
+    // 게시글 삭제
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(
+            @PathVariable Long postId,
+            @RequestHeader("userId") Long userId
+    ) {
+        postService.deletePost(postId, userId);
         return ResponseEntity.noContent().build();
     }
 }

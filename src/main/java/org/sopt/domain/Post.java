@@ -23,10 +23,10 @@ public class Post {
 
     public Post() {}
 
-    public Post(String title, String content) {
-        validatePost(title, content);
+    public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 
     public Long getId() {
@@ -40,24 +40,14 @@ public class Post {
     public String getContent() {
         return content;
     }
+    public String getAuthorName() { return user.getName(); }
 
-    // 제목+내용 한 번에 검증
-    private void validatePost(String title, String content) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.TITLE_NULL);
-        }
-        if (title.length() > 30) {
-            throw new CustomException(ErrorCode.TITLE_TOO_LONG);
-        }
-        if (content == null || content.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.CONTENT_NULL);
-        }
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
-    // 게시글 제목 수정 시에도 유효성 검증을 재사용하도록 함
-    public void updatePost(String newTitle, String newContent) {
-        validatePost(newTitle, newContent);
-        this.title = newTitle;
-        this.content = newContent;
+    public User getUser() {
+        return user;
     }
 }
