@@ -12,8 +12,6 @@ public enum ErrorCode {
 
     // 사용자 관련
     USER_NAME_NULL(HttpStatus.BAD_REQUEST, "사용자 이름은 필수입니다."),
-    USER_EMAIL_NULL(HttpStatus.BAD_REQUEST, "사용자 이메일은 필수입니다."),
-    USER_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
     UNAUTHORIZED_USER_ACCESS(HttpStatus.FORBIDDEN, "사용자 정보 접근 권한이 없습니다."),
 
