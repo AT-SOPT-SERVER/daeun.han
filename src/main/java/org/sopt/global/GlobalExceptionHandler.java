@@ -1,6 +1,8 @@
 package org.sopt.global;
 
-import org.springframework.http.HttpStatus;
+import org.sopt.dto.ErrorResponse;
+import org.sopt.global.exception.CustomException;
+import org.sopt.global.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 우리가 정의한 CustomException 처리
+    // 정의한 CustomException 처리
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         ErrorCode errorCode = e.getErrorCode();

@@ -1,8 +1,8 @@
 package org.sopt.domain;
 
 import jakarta.persistence.*;
-import org.sopt.global.CustomException;
-import org.sopt.global.ErrorCode;
+import org.sopt.global.exception.CustomException;
+import org.sopt.global.exception.ErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
