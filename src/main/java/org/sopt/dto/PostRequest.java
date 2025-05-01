@@ -1,6 +1,16 @@
 package org.sopt.dto;
 
-public record PostRequest(String title) {
-    // 생성자, getter가 자동 생성됨
+public class PostRequest {
+
+    private String title;
+    private String content;
+
+    public String title() {
+        return title;
+    }
+
+    public String content() {
+        return content;
+    }
 }
 

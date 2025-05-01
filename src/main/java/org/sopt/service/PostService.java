@@ -19,8 +19,8 @@ public class PostService {
     }
 
     // 게시물 생성
-    public Post createPost(String title) {
-        Post post = new Post(title);
+    public Post createPost(String title, String content) {
+        Post post = new Post(title, content);
         return postRepository.save(post);
     }
 
@@ -35,15 +35,15 @@ public class PostService {
                 .or(() -> { throw new CustomException(ErrorCode.POST_NOT_FOUND); });
     }
 
-    // 게시글 제목 수정
-    public boolean updatePostTitle(Long id, String newTitle) {
+    // 게시글 제목과 내용 수정
+    public boolean updatePost(Long id, String newTitle, String newContent) {
         Post post = postRepository.findById(id).orElse(null);
         if (post == null) {
             return false; // 해당 ID의 게시물이 없을 경우
         }
 
         try {
-            post.updateTitle(newTitle); // 도메인 객체의 메서드로 제목 수정
+            post.updatePost(newTitle, newContent); // 제목과 내용 동시에 수정
             postRepository.save(post);  // DB에 저장
             return true;
         } catch (IllegalArgumentException e) {

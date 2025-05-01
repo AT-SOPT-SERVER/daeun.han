@@ -22,7 +22,7 @@ public class PostController {
     // 게시물 생성
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody PostRequest request) {
-        Post post = postService.createPost(request.title());
+        Post post = postService.createPost(request.title(), request.content());
         return ResponseEntity.ok(post);
     }
 
@@ -40,11 +40,15 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    // 게시물 제목 수정
+    // 게시물 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePostTitle(@PathVariable Long id, @RequestBody PostRequest request) {
-        postService.updatePostTitle(id, request.title());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostRequest request) {
+        boolean updated = postService.updatePost(id, request.title(), request.content());
+        if (updated) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // 게시물 삭제
